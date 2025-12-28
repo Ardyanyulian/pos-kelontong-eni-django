@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Stock Management Dashboard - Warung Berkah</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#111418] dark:text-white min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-[#dbe0e6] dark:border-gray-800 bg-white dark:bg-[#1a2632] px-10 py-3 shadow-sm">
+<div class="flex items-center gap-4 text-[#111418] dark:text-white">
+<div class="size-8 text-primary flex items-center justify-center bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-2xl">storefront</span>
+</div>
+<h2 class="text-[#111418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">Warung Berkah</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<div class="hidden md:flex items-center gap-9">
+<a class="text-[#111418] dark:text-gray-200 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Kelola Barang</a>
+<a class="text-[#111418] dark:text-gray-200 text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Lihat Laporan</a>
+</div>
+<div class="flex items-center gap-3 pl-4 border-l border-[#dbe0e6] dark:border-gray-700">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-bold leading-none">Budi Santoso</p>
+<p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Admin</p>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20" data-alt="Portrait of Budi Santoso user avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBA3Y747r-lrPDUGpf_EGFsmfMwTQeD-RCq-1H_wabZO05J3mdd1Y82GKhJHm06ui3x38nkDh-z6jlvKQCjcMQNICIuTpcK_WCoJl-HmZkRP5prLmRfZtwAgou2Q9epnWesN54N9HpUTuKZN3EYZXrXDpkuuoxfjFgHA_he_9J7qJV2klRybdbWY1HDDVSR3Z5unOe6sTghMHFWuAThRg2EV8e99P1z6gLWVM7Psx9Vym8p5hsBrcPp3cnWWIYMvanu4XEcUOttIaKq");'></div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 flex justify-center py-8 px-4 sm:px-10 lg:px-40">
+<div class="w-full max-w-[1200px] flex flex-col gap-8">
+<!-- Page Header & Actions -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-2 text-gray-500 text-sm mb-1">
+<span class="material-symbols-outlined text-[18px]">warehouse</span>
+<span>Dashboard</span>
+<span>/</span>
+<span>Gudang</span>
+</div>
+<h1 class="text-[#111418] dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Sembako Utama</h1>
+<p class="text-[#617589] dark:text-gray-400 text-base font-normal leading-normal">Manajemen stok barang kebutuhan pokok harian.</p>
+</div>
+<div class="flex items-center gap-4">
+<!-- Total Assets Widget -->
+<div class="hidden lg:flex flex-col items-end pr-6 border-r border-[#dbe0e6] dark:border-gray-700">
+<p class="text-[#617589] dark:text-gray-400 text-sm font-medium">Total Aset</p>
+<p class="text-primary text-2xl font-bold tracking-tight">Rp 15.450.000</p>
+</div>
+<button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary hover:bg-blue-600 text-white text-sm font-bold leading-normal tracking-[0.015em] transition-colors shadow-lg shadow-blue-500/20 gap-2">
+<span class="material-symbols-outlined text-[20px]">add_circle</span>
+<span class="truncate">Tambah Barang</span>
+</button>
+</div>
+</div>
+<!-- Mobile Stats Widget (Visible only on smaller screens) -->
+<div class="lg:hidden w-full">
+<div class="flex flex-col gap-2 rounded-xl p-6 bg-white dark:bg-[#1a2632] shadow-sm border border-[#dbe0e6] dark:border-gray-800">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-green-100 dark:bg-green-900/30 rounded-lg text-green-600 dark:text-green-400">
+<span class="material-symbols-outlined">payments</span>
+</div>
+<p class="text-[#111418] dark:text-white text-base font-medium leading-normal">Total Aset</p>
+</div>
+<p class="text-[#111418] dark:text-white tracking-light text-3xl font-bold leading-tight mt-2">Rp 15.450.000</p>
+</div>
+</div>
+<!-- Data Table Section -->
+<div class="bg-white dark:bg-[#1a2632] rounded-xl border border-[#dbe0e6] dark:border-gray-800 shadow-sm overflow-hidden flex flex-col">
+<div class="p-5 border-b border-[#dbe0e6] dark:border-gray-800 flex justify-between items-center">
+<h3 class="text-lg font-bold text-[#111418] dark:text-white">Daftar Inventaris</h3>
+<div class="flex gap-2">
+<button class="size-9 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+<button class="size-9 flex items-center justify-center rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500">
+<span class="material-symbols-outlined">download</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-gray-50 dark:bg-gray-800/50 border-b border-[#dbe0e6] dark:border-gray-700">
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 min-w-[200px]">Nama Barang</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 w-[150px]">Stok</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 min-w-[150px]">Harga Beli</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 min-w-[150px]">Harga Jual</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 min-w-[150px] text-right">Hitung Total</th>
+<th class="px-6 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 w-[80px]"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#dbe0e6] dark:divide-gray-700">
+<!-- Row 1: High Stock -->
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-500">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+</div>
+<div>
+<p class="text-sm font-medium text-[#111418] dark:text-white">Beras Raja Lele</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">ID: BRL-001</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+                                        50 Sak
+                                    </span>
+</td>
+<td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Rp 110.000</td>
+<td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Rp 125.000</td>
+<td class="px-6 py-4 text-sm font-semibold text-[#111418] dark:text-white text-right">Rp 6.250.000</td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-400 hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: High Stock -->
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-500">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+</div>
+<div>
+<p class="text-sm font-medium text-[#111418] dark:text-white">Minyak Goreng Filma</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">ID: MGF-023</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+                                        30 Karton
+                                    </span>
+</td>
+<td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Rp 180.000</td>
+<td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Rp 200.000</td>
+<td class="px-6 py-4 text-sm font-semibold text-[#111418] dark:text-white text-right">Rp 6.000.000</td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-400 hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 3: Low Stock (Highlighted) -->
+<tr class="bg-red-50/60 hover:bg-red-50 dark:bg-red-900/10 dark:hover:bg-red-900/20 transition-colors group border-l-4 border-l-red-500">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-red-100 dark:bg-red-900/40 flex items-center justify-center text-red-600 dark:text-red-400">
+<span class="material-symbols-outlined text-[20px]">warning</span>
+</div>
+<div>
+<p class="text-sm font-bold text-red-700 dark:text-red-300">Telur Ayam</p>
+<p class="text-xs text-red-500 dark:text-red-400/70">ID: TLA-005 • Low Stock</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-white border border-red-200 text-red-700 dark:bg-red-900/50 dark:border-red-800 dark:text-red-300">
+                                        5 Tray
+                                    </span>
+</td>
+<td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Rp 45.000</td>
+<td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Rp 50.000</td>
+<td class="px-6 py-4 text-sm font-semibold text-[#111418] dark:text-white text-right">Rp 250.000</td>
+<td class="px-6 py-4 text-right">
+<button class="flex items-center justify-center size-8 bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors ml-auto" title="Restock Now">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+</button>
+</td>
+</tr>
+<!-- Row 4: High Stock -->
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-800/30 transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-500">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+</div>
+<div>
+<p class="text-sm font-medium text-[#111418] dark:text-white">Gula Pasir Gulaku</p>
+<p class="text-xs text-gray-500 dark:text-gray-400">ID: GPG-112</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300">
+                                        40 Pack
+                                    </span>
+</td>
+<td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Rp 15.000</td>
+<td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Rp 18.000</td>
+<td class="px-6 py-4 text-sm font-semibold text-[#111418] dark:text-white text-right">Rp 720.000</td>
+<td class="px-6 py-4 text-right">
+<button class="text-gray-400 hover:text-primary opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- Row 5: Low Stock (Highlighted) -->
+<tr class="bg-red-50/60 hover:bg-red-50 dark:bg-red-900/10 dark:hover:bg-red-900/20 transition-colors group border-l-4 border-l-red-500">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="size-10 rounded-lg bg-red-100 dark:bg-red-900/40 flex items-center justify-center text-red-600 dark:text-red-400">
+<span class="material-symbols-outlined text-[20px]">warning</span>
+</div>
+<div>
+<p class="text-sm font-bold text-red-700 dark:text-red-300">Garam Dapur</p>
+<p class="text-xs text-red-500 dark:text-red-400/70">ID: GRM-009 • Low Stock</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-white border border-red-200 text-red-700 dark:bg-red-900/50 dark:border-red-800 dark:text-red-300">
+                                        2 Pack
+                                    </span>
+</td>
+<td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Rp 2.000</td>
+<td class="px-6 py-4 text-sm text-gray-600 dark:text-gray-300">Rp 3.500</td>
+<td class="px-6 py-4 text-sm font-semibold text-[#111418] dark:text-white text-right">Rp 7.000</td>
+<td class="px-6 py-4 text-right">
+<button class="flex items-center justify-center size-8 bg-red-100 text-red-600 rounded hover:bg-red-200 transition-colors ml-auto" title="Restock Now">
+<span class="material-symbols-outlined text-[18px]">add_shopping_cart</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination Footer -->
+<div class="flex items-center justify-between p-4 border-t border-[#dbe0e6] dark:border-gray-800">
+<p class="text-sm text-gray-500 dark:text-gray-400">Menampilkan 5 dari 124 barang</p>
+<div class="flex gap-2">
+<button class="px-3 py-1 rounded border border-[#dbe0e6] dark:border-gray-700 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50">Prev</button>
+<button class="px-3 py-1 rounded border border-[#dbe0e6] dark:border-gray-700 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800">Next</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>
