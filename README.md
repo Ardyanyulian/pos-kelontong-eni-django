@@ -3,4 +3,5 @@ Authors :
 [@Hafizh2006] (https://github.com/Hafizh2006) Hafizh Ashshiddiqie [2400018003]
 [@ridangbima] (https://github.com/ridangbima) Ridang Bima Pamungkas [2400018007]
 
-Unduh File Laporan:
+Unduh File Laporan: https://github.com/Ardyanyulian/pos-kelontong-eni-django/blob/main/TP-PBO2025.docx
+
