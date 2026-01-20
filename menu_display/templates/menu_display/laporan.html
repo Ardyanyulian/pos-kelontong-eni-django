@@ -1,37 +1,38 @@
 <!DOCTYPE html>
-
-<html class="light" lang="en"><head>
+{% load static %}
+<html class="light" lang="en">
+<head>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Laporan - Warung Management System</title>
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;family=Noto+Sans:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&family=Noto+Sans:wght@400;500;700;900&display=swap" rel="stylesheet"/>
 <!-- Material Symbols -->
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <!-- Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <!-- Tailwind Config -->
 <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#137fec",
-                        "background-light": "#f6f7f8",
-                        "background-dark": "#101922",
-                    },
-                    fontFamily: {
-                        "display": ["Inter", "sans-serif"]
-                    },
-                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "primary": "#137fec",
+                    "background-light": "#f6f7f8",
+                    "background-dark": "#101922",
                 },
+                fontFamily: {
+                    "display": ["Inter", "sans-serif"]
+                },
+                borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
             },
-        }
-    </script>
+        },
+    }
+</script>
 <script>
     (function() {
         const savedTheme = localStorage.getItem('theme') || 'light';
@@ -48,33 +49,26 @@
     })();
 </script>
 <style>
-        /* Custom scrollbar for table if needed */
-        .custom-scrollbar::-webkit-scrollbar {
-            height: 6px;
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background-color: #cbd5e1;
-            border-radius: 20px;
-        }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
-            background-color: #334155;
-        }
-        
-        /* Simple CSS Chart Animations/Styles */
-        .chart-bar {
-            transition: height 0.5s ease-in-out;
-        }
-    </style>
+    .custom-scrollbar::-webkit-scrollbar {
+        height: 6px;
+        width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #cbd5e1;
+        border-radius: 20px;
+    }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #334155;
+    }
+</style>
 </head>
 <body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white overflow-x-hidden min-h-screen flex flex-col">
 <!-- TopNavBar -->
 <header class="sticky top-0 z-50 bg-white dark:bg-[#1A2633] border-b border-slate-200 dark:border-slate-800 px-4 sm:px-10 py-3">
   <div class="flex items-center justify-between">
-    
     <div class="flex items-center gap-3 text-slate-900 dark:text-white">
       <div class="size-8 flex items-center justify-center rounded bg-primary/10 text-primary">
         <span class="material-symbols-outlined">storefront</span>
@@ -100,430 +94,157 @@
         </div>
       </a>
     </div>
-
   </div>
 </header>
+
 <div class="layout-container flex h-full grow flex-col w-full max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
-<div class="flex flex-col lg:flex-row gap-6 h-full">
-<!-- Side Navigation (Filters/Categories) -->
-<!-- <aside class="w-full lg:w-64 shrink-0 flex flex-col gap-6">
-<div class="bg-white dark:bg-[#1A2633] rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-4 sticky top-24">
-<div class="flex flex-col gap-4">
-<div class="flex flex-col px-2">
-<h1 class="text-slate-900 dark:text-white text-base font-bold leading-normal">Kategori Laporan</h1>
-<p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal mt-1">Pilih jenis analisis data</p>
-</div>
-<div class="flex flex-col gap-1">
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary hover:bg-primary/20 transition-colors group" href="#">
-<span class="material-symbols-outlined group-hover:scale-110 transition-transform">dashboard</span>
-<p class="text-sm font-medium leading-normal">Ringkasan</p>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
-<span class="material-symbols-outlined group-hover:scale-110 transition-transform">trending_up</span>
-<p class="text-sm font-medium leading-normal">Penjualan</p>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
-<span class="material-symbols-outlined group-hover:scale-110 transition-transform">inventory_2</span>
-<p class="text-sm font-medium leading-normal">Stok Barang</p>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
-<span class="material-symbols-outlined group-hover:scale-110 transition-transform">payments</span>
-<p class="text-sm font-medium leading-normal">Keuangan</p>
-</a>
-<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors group" href="#">
-<span class="material-symbols-outlined group-hover:scale-110 transition-transform">groups</span>
-<p class="text-sm font-medium leading-normal">Pelanggan</p>
-</a>
-</div>
-<div class="h-px bg-slate-200 dark:bg-slate-700 my-2"></div>
-<div class="flex flex-col px-2 gap-2">
-<h3 class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-wider">Periode Aktif</h3>
-<div class="flex items-center gap-2 text-sm font-medium text-slate-900 dark:text-white">
-<span class="material-symbols-outlined text-slate-400 text-[18px]">calendar_month</span>
-                                1 Okt - 31 Okt 2023
-</div>
-</div>
-</div>
-</div> -->
-<!-- <div class="bg-primary rounded-xl p-5 text-white shadow-lg shadow-primary/30 relative overflow-hidden hidden lg:block">
-<div class="absolute -right-4 -top-4 opacity-20">
-<span class="material-symbols-outlined text-[100px]">description</span>
-</div>
-<h3 class="font-bold text-lg mb-1 relative z-10">Unduh Laporan</h3>
-<p class="text-primary-100 text-sm mb-4 relative z-10">Dapatkan data lengkap dalam format PDF untuk arsip bulanan.</p>
-<button class="bg-white text-primary w-full py-2.5 rounded-lg text-sm font-bold shadow-sm hover:bg-slate-50 transition-colors relative z-10 flex items-center justify-center gap-2">
-<span class="material-symbols-outlined text-[18px]">download</span>
-                        Unduh PDF
-                    </button>
-</div>
-</aside> -->
-<!-- Main Content Area -->
-<main class="flex-1 flex flex-col gap-6 min-w-0">
-<!-- Header & Actions -->
-<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-<div class="flex flex-col gap-1">
-<h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Laporan Operasional</h1>
-<p class="text-slate-500 dark:text-slate-400">Ringkasan performa bisnis dan analisis penjualan harian.</p>
-</div>
-<div class="flex items-center gap-3">
-<!-- <button class="hidden sm:flex h-10 items-center justify-center px-4 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#1A2633] text-slate-700 dark:text-slate-200 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-<span class="material-symbols-outlined text-[20px] mr-2">print</span>
-                            Print
-                        </button> -->
-<!-- <button class="flex h-10 items-center justify-center px-4 rounded-lg bg-primary text-white text-sm font-bold hover:bg-blue-600 transition-colors shadow-md shadow-blue-500/20">
-<span class="material-symbols-outlined text-[20px] mr-2">autorenew</span>
-                            Generate Report
-                        </button> -->
-</div>
-</div>
-<!-- Date Range Slider Visualization -->
-<div class="bg-white dark:bg-[#1A2633] rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-sm">
-<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-<h3 class="font-bold text-slate-900 dark:text-white">Rentang Tanggal</h3>
-<!-- <div class="flex gap-2">
-<button class="px-3 py-1 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors">Minggu Ini</button>
-<button class="px-3 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary ring-1 ring-primary/20">Bulan Ini</button>
-<button class="px-3 py-1 text-xs font-medium rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-primary/10 hover:text-primary transition-colors">Tahun Ini</button>
-</div> -->
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-    <!-- Tanggal Mulai -->
-    <div class="flex flex-col gap-1">
-        <label class="text-sm font-medium text-slate-600 dark:text-slate-400">
-            Tanggal Mulai
-        </label>
-        <input
-            type="date"
-            name="tanggal_mulai"
-            class="form-input rounded-lg border-slate-200 dark:border-slate-700 
-                   bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white
-                   focus:ring-primary focus:border-primary"
-        />
+  <div class="flex flex-col gap-6 h-full">
+    <!-- Header & Actions -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div class="flex flex-col gap-1">
+        <h1 class="text-3xl font-black tracking-tight text-slate-900 dark:text-white">Laporan Operasional</h1>
+        <p class="text-slate-500 dark:text-slate-400">Ringkasan performa bisnis dan analisis penjualan harian.</p>
+      </div>
     </div>
 
-    <!-- Tanggal Akhir -->
-    <div class="flex flex-col gap-1">
-        <label class="text-sm font-medium text-slate-600 dark:text-slate-400">
-            Tanggal Akhir
-        </label>
-        <input
-            type="date"
-            name="tanggal_akhir"
-            class="form-input rounded-lg border-slate-200 dark:border-slate-700 
-                   bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white
-                   focus:ring-primary focus:border-primary"
-        />
+    <!-- Date Range Filter -->
+    <div class="bg-white dark:bg-[#1A2633] rounded-xl border border-slate-200 dark:border-slate-800 p-4 sm:p-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+        <h3 class="font-bold text-slate-900 dark:text-white">Rentang Tanggal</h3>
+      </div>
+      
+      <form method="GET" action="{% url 'laporan' %}" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <!-- Tanggal Mulai -->
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Tanggal Mulai</label>
+          <input type="date" name="tgl_mulai" value="{{ tgl_mulai }}"
+                 class="form-input rounded-lg border-slate-200 dark:border-slate-700 
+                        bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white
+                        focus:ring-primary focus:border-primary"/>
+        </div>
+
+        <!-- Tanggal Akhir -->
+        <div class="flex flex-col gap-1">
+          <label class="text-sm font-medium text-slate-600 dark:text-slate-400">Tanggal Akhir</label>
+          <input type="date" name="tgl_akhir" value="{{ tgl_akhir }}"
+                 class="form-input rounded-lg border-slate-200 dark:border-slate-700 
+                        bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-white
+                        focus:ring-primary focus:border-primary"/>
+        </div>
+
+        <!-- Tombol Terapkan -->
+        <div class="flex items-end">
+          <button type="submit" class="w-full h-10 rounded-lg bg-primary text-white text-sm font-bold hover:bg-blue-600 transition-colors">
+            Terapkan Filter
+          </button>
+        </div>
+      </form>
     </div>
 
-    <!-- Tombol Terapkan -->
-    <div class="flex items-end">
-        <button
-            class="w-full h-10 rounded-lg bg-primary text-white text-sm font-bold
-                   hover:bg-blue-600 transition-colors">
-            Terapkan
-        </button>
-    </div>
-</div>
-<!-- End Thumb -->
-<div class="absolute top-3 right-[0%] -mr-3 flex flex-col items-center gap-1 group cursor-pointer">
-<div class="size-6 bg-white dark:bg-slate-800 border-2 border-primary rounded-full shadow-sm group-hover:scale-110 transition-transform"></div>
-<span class="text-xs font-bold text-slate-900 dark:text-white mt-1">31 Okt</span>
-</div>
-</div>
-</div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-    <div class="bg-white dark:bg-[#1A2633] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow group">
+    <!-- Statistik Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+      <!-- Total Pendapatan -->
+      <div class="bg-white dark:bg-[#1A2633] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow group">
         <div class="flex items-center justify-between mb-4">
-            <div class="size-12 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-[28px]">payments</span>
-            </div>
-            <span class="text-xs font-bold text-green-600 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded">Bulanan</span>
+          <div class="size-12 rounded-lg bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-[28px]">payments</span>
+          </div>
+          <span class="text-xs font-bold text-green-600 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded">Periode</span>
         </div>
         <div>
-            <p class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Total Pendapatan</p>
-            <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-1">Rp 15.450.000</h3>
+          <p class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Total Pendapatan</p>
+          <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-1">Rp {{ total_pendapatan|floatformat:0 }}</h3>
         </div>
-    </div>
+      </div>
 
-    <div class="bg-white dark:bg-[#1A2633] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow group">
+      <!-- Total Transaksi -->
+      <div class="bg-white dark:bg-[#1A2633] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow group">
         <div class="flex items-center justify-between mb-4">
-            <div class="size-12 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-[28px]">receipt_long</span>
-            </div>
-            <span class="text-xs font-bold text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">Aktif</span>
+          <div class="size-12 rounded-lg bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-[28px]">receipt_long</span>
+          </div>
+          <span class="text-xs font-bold text-blue-600 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">Aktif</span>
         </div>
         <div>
-            <p class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Total Transaksi</p>
-            <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-1">1.242</h3>
+          <p class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Total Transaksi</p>
+          <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-1">{{ total_transaksi }} Transaksi</h3>
         </div>
-    </div>
+      </div>
 
-    <div class="bg-white dark:bg-[#1A2633] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow group">
+      <!-- Laba Bersih -->
+      <div class="bg-white dark:bg-[#1A2633] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow group">
         <div class="flex items-center justify-between mb-4">
-            <div class="size-12 rounded-lg bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-[28px]">savings</span>
-            </div>
-            <span class="text-xs font-bold text-purple-600 bg-purple-50 dark:bg-purple-900/30 px-2 py-1 rounded">Margin 31%</span>
+          <div class="size-12 rounded-lg bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-[28px]">savings</span>
+          </div>
+          <span class="text-xs font-bold text-purple-600 bg-purple-50 dark:bg-purple-900/30 px-2 py-1 rounded">Margin 31%</span>
         </div>
         <div>
-            <p class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Laba Bersih</p>
-            <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-1">Rp 4.800.000</h3>
+          <p class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Laba Bersih</p>
+          <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-1">Rp {{ laba_bersih|floatformat:0 }}</h3>
         </div>
-    </div>
+      </div>
 
-    <div class="bg-white dark:bg-[#1A2633] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow group">
+      <!-- Stok Menipis -->
+      <div class="bg-white dark:bg-[#1A2633] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow group">
         <div class="flex items-center justify-between mb-4">
-            <div class="size-12 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-[28px]">warning</span>
-            </div>
-            <div class="flex h-2 w-2 rounded-full bg-red-500 animate-pulse"></div>
+          <div class="size-12 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 flex items-center justify-center group-hover:scale-110 transition-transform">
+            <span class="material-symbols-outlined text-[28px]">warning</span>
+          </div>
+          <div class="flex h-2 w-2 rounded-full bg-red-500 animate-pulse"></div>
         </div>
         <div>
-            <p class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Stok Menipis</p>
-            <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-1">5 Item</h3>
+          <p class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">Stok Menipis</p>
+          <h3 class="text-2xl font-black text-slate-900 dark:text-white mt-1">{{ stok_menipis }} Item</h3>
         </div>
+      </div>
     </div>
+
+    
+    <!-- Transaction Details Table -->
+    <div class="bg-white dark:bg-[#1A2633] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+  <div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+    <h3 class="font-bold text-lg text-slate-900 dark:text-white">Rincian Transaksi</h3>
+    <div class="flex gap-2">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </a>
+      {% endif %}
+      
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="p-2 bg-slate-100 dark:bg-slate-800 rounded-lg">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+  
+  <div class="overflow-x-auto custom-scrollbar">
+    <table class="w-full text-left border-collapse">
+      <thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">
+        <tr>
+          <th class="px-6 py-4">ID Transaksi</th>
+          <th class="px-6 py-4">Waktu</th>
+          <th class="px-6 py-4 text-right">Total</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
+        {% for trx in page_obj %}
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+          <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">#TRX-{{ trx.id_transaksi|stringformat:"04d" }}</td>
+          <td class="px-6 py-4 text-slate-500 dark:text-slate-400">{{ trx.tanggal|date:"d F Y" }}</td>
+          <td class="px-6 py-4 text-right font-bold text-slate-900 dark:text-white">
+            Rp {{ trx.total_harga|floatformat:0 }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
-<!-- <p class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">5 Item</p> -->
-<div class="flex items-center gap-1 text-red-600 dark:text-red-400 text-sm font-medium mt-1">
-<!-- <span class="material-symbols-outlined text-[16px]">trending_down</span>
-<span>-2%</span>
-<span class="text-slate-400 dark:text-slate-500 font-normal ml-1">ketersediaan</span> -->
+
+  </div>
 </div>
-</div>
-</div>
-<!-- Charts Section -->
-<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
-<!-- Main Chart (Sales Trend) -->
-<div class="mt-10 xl:col-span-2 bg-white dark:bg-[#1A2633] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col h-full">
-<div class="flex items-center justify-between mb-6">
-<div>
-<h3 class="font-bold text-lg text-slate-900 dark:text-white">Tren Penjualan Harian</h3>
-<p class="text-sm text-slate-500 dark:text-slate-400">Oktober 2023</p>
-</div>
-<!-- <button class="text-primary text-sm font-bold hover:underline">Lihat Detail</button> -->
-</div>
-<!-- CSS Bar Chart Implementation -->
-<div class="flex-1 w-full min-h-[240px] flex items-end justify-between gap-2 sm:gap-4 px-2">
-<!-- Y-Axis Labels (Visual Only)
-<div class="hidden sm:flex flex-col justify-between h-full text-xs text-slate-400 dark:text-slate-500 py-1 absolute left-6 pointer-events-none opacity-50">
-<span>3jt</span>
-<span>2jt</span>
-<span>1jt</span>
-<span>0</span>
-</div> -->
-<!-- Bar Items -->
-<div class="flex flex-col items-center justify-end w-full h-full gap-2 group">
-<div class="w-full bg-blue-100 dark:bg-blue-900/20 rounded-t-sm h-[40%] relative group-hover:bg-primary transition-colors">
-<div class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs py-1 px-2 rounded pointer-events-none transition-opacity">1.2jt</div>
-</div>
-<span class="text-xs text-slate-400 hidden sm:block">1</span>
-</div>
-<div class="flex flex-col items-center justify-end w-full h-full gap-2 group">
-<div class="w-full bg-blue-100 dark:bg-blue-900/20 rounded-t-sm h-[65%] relative group-hover:bg-primary transition-colors">
-<div class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs py-1 px-2 rounded pointer-events-none transition-opacity">1.9jt</div>
-</div>
-<span class="text-xs text-slate-400 hidden sm:block">5</span>
-</div>
-<div class="flex flex-col items-center justify-end w-full h-full gap-2 group">
-<div class="w-full bg-blue-100 dark:bg-blue-900/20 rounded-t-sm h-[50%] relative group-hover:bg-primary transition-colors"></div>
-<span class="text-xs text-slate-400 hidden sm:block">10</span>
-</div>
-<div class="flex flex-col items-center justify-end w-full h-full gap-2 group">
-<div class="w-full bg-blue-100 dark:bg-blue-900/20 rounded-t-sm h-[80%] relative group-hover:bg-primary transition-colors">
-<div class="opacity-0 group-hover:opacity-100 absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs py-1 px-2 rounded pointer-events-none transition-opacity">2.4jt</div>
-</div>
-<span class="text-xs text-slate-400 hidden sm:block">15</span>
-</div>
-<div class="flex flex-col items-center justify-end w-full h-full gap-2 group">
-<div class="w-full bg-blue-100 dark:bg-blue-900/20 rounded-t-sm h-[45%] relative group-hover:bg-primary transition-colors"></div>
-<span class="text-xs text-slate-400 hidden sm:block">20</span>
-</div>
-<div class="flex flex-col items-center justify-end w-full h-full gap-2 group">
-<div class="w-full bg-primary rounded-t-sm h-[90%] relative shadow-[0_0_15px_rgba(19,127,236,0.3)]">
-<div class="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-xs py-1 px-2 rounded pointer-events-none">2.8jt</div>
-</div>
-<span class="text-xs font-bold text-primary hidden sm:block">25</span>
-</div>
-<div class="flex flex-col items-center justify-end w-full h-full gap-2 group">
-<div class="w-full bg-blue-100 dark:bg-blue-900/20 rounded-t-sm h-[70%] relative group-hover:bg-primary transition-colors"></div>
-<span class="text-xs text-slate-400 hidden sm:block">30</span>
-</div>
-</div>
-</div>
-<!-- Secondary Chart (Categories) -->
-<div class="mt-10 dark:bg-[#1A2633] p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col h-full">
-<h3 class="font-bold text-lg text-slate-900 dark:text-white mb-6">Kategori Terlaris</h3>
-<div class="flex-1 flex flex-col items-center justify-center gap-6">
-<!-- CSS Donut Chart -->
-<div class="relative size-48 rounded-full" style="background: conic-gradient(#137fec 0% 45%, #60a5fa 45% 75%, #bfdbfe 75% 100%);">
-<div class="absolute inset-4 bg-white dark:bg-[#1A2633] rounded-full flex items-center justify-center flex-col">
-<span class="text-3xl font-black text-slate-900 dark:text-white">45%</span>
-<span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Makanan</span>
-</div>
-</div>
-<div class="w-full grid grid-cols-2 gap-4">
-<div class="flex items-center gap-2">
-<div class="size-3 rounded-full bg-primary"></div>
-<div class="flex flex-col">
-<span class="text-xs text-slate-500 dark:text-slate-400">Makanan</span>
-<span class="text-sm font-bold text-slate-900 dark:text-white">Rp 6.7jt</span>
-</div>
-</div>
-<div class="flex items-center gap-2">
-<div class="size-3 rounded-full bg-blue-400"></div>
-<div class="flex flex-col">
-<span class="text-xs text-slate-500 dark:text-slate-400">Minuman</span>
-<span class="text-sm font-bold text-slate-900 dark:text-white">Rp 4.5jt</span>
-</div>
-</div>
-<div class="flex items-center gap-2">
-<div class="size-3 rounded-full bg-blue-200"></div>
-<div class="flex flex-col">
-<span class="text-xs text-slate-500 dark:text-slate-400">Sembako</span>
-<span class="text-sm font-bold text-slate-900 dark:text-white">Rp 3.8jt</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Transaction Details Table -->
-<div class="mt-20 bg-white dark:bg-[#1A2633] rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden flex flex-col">
-<div class="py-4 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-<h3 class="font-bold text-lg text-slate-900 dark:text-white">Rincian Transaksi</h3>
-<div class="flex gap-3">
-<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-<span class="material-symbols-outlined text-[18px]">filter_list</span>
-                                Filter
-                            </button>
-<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
-<span class="material-symbols-outlined text-[18px]">sort</span>
-                                Urutkan
-                            </button>
-</div>
-</div>
-<div class="overflow-x-auto custom-scrollbar">
-<table class="w-full text-left border-collapse">
-<thead class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs uppercase font-bold tracking-wider">
-<tr>
-<th class="px-6 py-4">ID Transaksi</th>
-<th class="px-6 py-4">Waktu</th>
-<th class="px-6 py-4">Item</th>
-<th class="px-6 py-4">Metode Bayar</th>
-<th class="px-6 py-4">Status</th>
-<th class="px-6 py-4 text-right">Total</th>
-<th class="px-6 py-4"></th>
-</tr>
-</thead>
-<tbody class="divide-y divide-slate-100 dark:divide-slate-800 text-sm">
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">#TRX-0092</td>
-<td class="px-6 py-4 text-slate-500 dark:text-slate-400">25 Okt, 14:30</td>
-<td class="px-6 py-4 text-slate-600 dark:text-slate-300">
-<div class="flex flex-col">
-<span>Paket Nasi Ayam</span>
-<span class="text-xs text-slate-400">+ 2 items lainnya</span>
-</div>
-</td>
-<td class="px-6 py-4 text-slate-600 dark:text-slate-300">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-slate-400 text-[18px]">qr_code_2</span>
-                                            QRIS
-                                        </div>
-</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
-                                            Sukses
-                                        </span>
-</td>
-<td class="px-6 py-4 text-right font-bold text-slate-900 dark:text-white">Rp 45.000</td>
-<td class="px-6 py-4 text-right">
-<button class="text-slate-400 hover:text-primary transition-colors">
-<span class="material-symbols-outlined">more_vert</span>
-</button>
-</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">#TRX-0091</td>
-<td class="px-6 py-4 text-slate-500 dark:text-slate-400">25 Okt, 14:15</td>
-<td class="px-6 py-4 text-slate-600 dark:text-slate-300">
-<div class="flex flex-col">
-<span>Es Teh Manis</span>
-</div>
-</td>
-<td class="px-6 py-4 text-slate-600 dark:text-slate-300">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-slate-400 text-[18px]">payments</span>
-                                            Tunai
-                                        </div>
-</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
-                                            Sukses
-                                        </span>
-</td>
-<td class="px-6 py-4 text-right font-bold text-slate-900 dark:text-white">Rp 5.000</td>
-<td class="px-6 py-4 text-right">
-<button class="text-slate-400 hover:text-primary transition-colors">
-<span class="material-symbols-outlined">more_vert</span>
-</button>
-</td>
-</tr>
-<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
-<td class="px-6 py-4 font-medium text-slate-900 dark:text-white">#TRX-0090</td>
-<td class="px-6 py-4 text-slate-500 dark:text-slate-400">25 Okt, 13:45</td>
-<td class="px-6 py-4 text-slate-600 dark:text-slate-300">
-<div class="flex flex-col">
-<span>Minyak Goreng 2L</span>
-<span class="text-xs text-slate-400">+ 1 item lainnya</span>
-</div>
-</td>
-<td class="px-6 py-4 text-slate-600 dark:text-slate-300">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-slate-400 text-[18px]">payments</span>
-                                            Tunai
-                                        </div>
-</td>
-<td class="px-6 py-4">
-<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400">
-                                            Pending
-                                        </span>
-</td>
-<td class="px-6 py-4 text-right font-bold text-slate-900 dark:text-white">Rp 38.500</td>
-<td class="px-6 py-4 text-right">
-<button class="text-slate-400 hover:text-primary transition-colors">
-<span class="material-symbols-outlined">more_vert</span>
-</button>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="px-6 py-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/30 flex items-center justify-between">
-<span class="text-sm text-slate-500 dark:text-slate-400">Menampilkan 1-3 dari 142 transaksi</span>
-<div class="flex gap-2">
-<button class="size-8 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#1A2633] text-slate-400 hover:text-primary disabled:opacity-50">
-<span class="material-symbols-outlined text-[16px]">chevron_left</span>
-</button>
-<button class="size-8 flex items-center justify-center rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-[#1A2633] text-slate-400 hover:text-primary">
-<span class="material-symbols-outlined text-[16px]">chevron_right</span>
-</button>
-</div>
-</div>
-</div>
-</main>
-</div>
-</div>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const savedAvatar = localStorage.getItem('userAvatar');
-        if (savedAvatar) {
-            document.querySelectorAll('.user-avatar-target').forEach(el => {
-                el.style.backgroundImage = `url('${savedAvatar}')`;
-            });
-        }
-    });
-</script>
-</body></html>
+</body>
+</html>

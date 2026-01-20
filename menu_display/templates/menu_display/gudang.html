@@ -219,7 +219,7 @@
                         </button>
 
                         {% if request.session.hak == 'admin' %}
-                        <a href="{% url 'hapus_barang' items.id %}" onclick="return confirm('Hapus barang ini?')"
+                        <a href="{% url 'hapus_barang' items.ID %}" onclick="return confirm('Hapus barang ini?')"
                         class="flex items-center justify-center size-8 bg-red-100 text-red-600 rounded hover:bg-red-200">
                             <span class="material-symbols-outlined text-[18px]">delete</span>
                         </a>

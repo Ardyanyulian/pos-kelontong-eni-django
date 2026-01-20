@@ -50,7 +50,7 @@
         <form action="{% url 'tambah_transaksi' %}" method="POST" id="formTransaksi">
             {% csrf_token %}
             
-            <h1 class="text-2xl font-bold mb-6">Transaksi Baru ({{ next_id }})</h1>
+            <h1 class="text-2xl font-bold mb-6">Transaksi Baru </h1>
 
             <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm mb-6 grid grid-cols-2 gap-4 border dark:border-gray-700">
                 <div>
@@ -117,9 +117,9 @@
                 {   
                     id: "{{ b.id }}",
                     nama: "{{ b.nama }}",
-                    harga: "{{ b.hargajual|stringformat:'d' }}", 
-                    stok: "{{ b.stok|floatformat:"0" }}"
-                },
+                    harga: {{ b.hargajual|default:0|floatformat:'0' }},
+                    stok: {{ b.stok|default:0|floatformat:'0' }}
+                }{% if not forloop.last %},{% endif %}
             {% endfor %}
         ];
 

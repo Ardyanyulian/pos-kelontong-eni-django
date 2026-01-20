@@ -1,4 +1,5 @@
 import os
+import json
 import time
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -6,6 +7,9 @@ from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 from django.core.paginator import Paginator
 from datetime import datetime
+from django.db.models import Sum, FloatField
+from django.db.models.functions import TruncDate, Cast
+from django.contrib import messages
 
 # Import Class 
 from .logic.Barang import Barang as BarangClass
@@ -38,8 +42,6 @@ def tampilkan_menu(request):
         'nama_warung': "Warung Makan Berkah",
     }
     
-    # PERBAIKAN: Hapus 'templates/' dari path string.
-    # Django tahu ia harus mencari di folder templates/
     return render(request, 'menu_display/menu.html', context)
 
 
@@ -50,7 +52,6 @@ def tampilkan_index(request):
         'pler': "Makado"
     }
     
-
     return render(request, 'menu_display/index.html', context)
 
 
@@ -128,7 +129,6 @@ def tampilkan_profile(request, ID):
     if not request.session.get('username'):
         return redirect('login')
     
-    # PERBAIKAN: Gunakan PegawaiModel
     pegawai = PegawaiModel.objects.get(id_pegawai=ID)
     context = {'ID': ID, 'pegawai': pegawai}
     return render(request, 'menu_display/profile.html', context)
@@ -139,7 +139,7 @@ def tampilkan_logout(request):
 
 def update_profile(request, ID):
     if request.method == 'POST':
-        p_db = PegawaiModel.objects.get(id_pegawai=ID) # PERBAIKAN: PegawaiModel
+        p_db = PegawaiModel.objects.get(id_pegawai=ID)
         role = request.session.get('hak')
 
         if role == 'admin':
@@ -147,7 +147,6 @@ def update_profile(request, ID):
         else:
             user_obj = AssistantClass(p_db.nama, p_db.password, p_db.nomor_telepon)
 
-        # Update via Setter Logic
         user_obj.setNama(request.POST.get('nama'))
         user_obj.setNomorTelepon(request.POST.get('nomorHp'))
         
@@ -163,19 +162,16 @@ def upload_foto_saja(request, ID):
         try:
             foto = request.FILES.get('foto_input')
             
-            # Cek folder media/pegawai secara otomatis
             target_dir = os.path.join(settings.MEDIA_ROOT, 'pegawai')
             if not os.path.exists(target_dir):
                 os.makedirs(target_dir)
 
             fs = FileSystemStorage()
-            # Gunakan timestamp agar nama file unik jika user upload berkali-kali
             import time
             ext = os.path.splitext(foto.name)[1]
             filename = fs.save(f"pegawai/{ID}_{int(time.time())}{ext}", foto)
             file_url = fs.url(filename)
 
-            # Update Database
             pegawai = PegawaiModel.objects.get(id_pegawai=ID)
             pegawai.foto_profil = file_url
             pegawai.save()
@@ -196,13 +192,10 @@ def tampilkan_gudang(request):
     if not nama:
         return redirect('login')
     
-    # AMBIL DARI DATABASE (Gunakan BarangModel)
     query_db = BarangModel.objects.all()
     
-    # PROSES INSTANSI KE OOP (Gunakan BarangClass)
     daftar_objek_oop = []
     for b in query_db:
-        # Pindahkan data dari DB ke Class Manual
         objek = BarangClass(
             ID=b.id, 
             nama=b.nama, 
@@ -212,12 +205,10 @@ def tampilkan_gudang(request):
         )
         daftar_objek_oop.append(objek)
 
-    # Jalankan sorting pada list objek OOP
     barang_terurut = quicksort(daftar_objek_oop)
 
-    # Hitung total (Demonstrasi OOP)
     for items in barang_terurut:
-        items.total = int(items.stok) * int(items.hargaJual) # Gunakan atribut dari Class
+        items.total = int(items.stok) * int(items.hargaJual)
     
     p = Paginator(barang_terurut, 5)
     nomor_halaman = request.GET.get('page')
@@ -230,11 +221,8 @@ def tampilkan_gudang(request):
     return render(request, 'menu_display/gudang.html', context)
 
 def hapus_barang(request, id_barang):
-    # Ambil data dari DB
     b_db = BarangModel.objects.get(id=id_barang)
-    # Instansiasi OOP (Pamer ke dosen: "Ini pak, saya pakai class manual saya")
     objek = BarangClass(b_db.id, b_db.nama, b_db.stok, b_db.hargabeli, b_db.hargajual)
-    # Gunakan method hapusBarang() untuk ambil ID
     target_id = objek.hapusBarang()
     BarangModel.objects.filter(id=target_id).delete()
     return redirect('gudang')
@@ -242,16 +230,14 @@ def hapus_barang(request, id_barang):
 
 def tambah_barang(request):
     if request.method == "POST":
-        # Ambil data dari form (perhatikan string di dalam .get)
         id_input = request.POST.get('id')
         nama_input = request.POST.get('nama')
         stok_input = request.POST.get('stok')
         beli_input = request.POST.get('hargaBeli')
         jual_input = request.POST.get('hargaJual')
 
-        # Simpan ke Database
         BarangModel.objects.create(
-            id=id_input, # Sesuaikan dengan primary_key=True di modelmu
+            id=id_input,
             nama=nama_input,
             stok=int(stok_input),
             hargabeli=float(beli_input),
@@ -259,14 +245,13 @@ def tambah_barang(request):
         )
         return redirect('gudang')
     
-    return redirect('tambah-barang') # Jika bukan POST balik ke form
+    return redirect('tambah-barang')
 
 def tambahStok(request):
     if request.method == "POST":
         id_barang = request.POST.get('id_barang')
         jumlah = int(request.POST.get('jumlah', 0))
         
-        # Gunakan ID (huruf besar) sesuai model kamu
         b_db = BarangModel.objects.filter(id=id_barang).first()
         
         if b_db:
@@ -286,7 +271,6 @@ def kurangiStok(request):
         b_db = BarangModel.objects.get(id=id_barang)
         objek = BarangClass(b_db.id, b_db.nama, b_db.stok, b_db.hargabeli, b_db.hargajual)
         
-        # PANGGIL METHOD CLASS KURANGI
         objek.kurangiStok(jumlah)
         
         b_db.stok = objek.infoStok()
@@ -315,31 +299,32 @@ def tampilkan_transaksi(request):
     
     context = {
         'next_id': f"TRX-{tahun_saiki}{str(new_id_num).zfill(3)}",
-        'daftar_barang': BarangModel.objects.all() # PERBAIKAN: BarangModel
+        'daftar_barang': BarangModel.objects.all()
     }
     return render(request, 'menu_display/transaksi.html', context)
 
 def tambah_transaksi(request):
     if request.method == "POST":
-        # 1. Inisialisasi Wrapper Transaksi
+        # Ambil tanggal dari form agar tidak otomatis tanggal 19
+        tanggal_input = request.POST.get('tanggal_transaksi')
+        
+        # Inisialisasi wrapper
         wrapper_trx = TransaksiClass(namaPembeli=request.POST.get('nama_pembeli'))
         
-        # Ambil data dari form yang dikirimkan dan bentuknya List
         barang_ids = request.POST.getlist('item_barang[]')
         qtys = request.POST.getlist('item_qty[]')
 
-        # 2. Proses Barang satu per satu
-        for b_id, qty in zip(barang_ids, qtys):
-            if not b_id or not qty: 
-                continue
-            
-            # Ambil data dari Database
-            try:
-                b_db = BarangModel.objects.get(id=b_id)
-            except BarangModel.DoesNotExist:
-                continue
+        if not barang_ids or sum(int(q) for q in qtys if q) <= 0:
+            return redirect('transaksi') # Atau kirim pesan error
 
-            # Bungkus ke dalam BarangClass
+        total_kalkulasi_manual = 0 # Cadangan perhitungan manual
+
+        for b_id, qty in zip(barang_ids, qtys):
+            if not b_id or not qty: continue
+            
+            b_db = BarangModel.objects.get(id=b_id)
+            
+            # Buat objek barang OOP
             wrap_barang = BarangClass(
                 ID=b_db.id, 
                 nama=b_db.nama, 
@@ -348,37 +333,41 @@ def tambah_transaksi(request):
                 hargaJual=b_db.hargajual
             )
             
-            # Buat Detail Transaksi Wrapper
+            # Masukkan ke detail pesanan
             wrap_detail = DetailTransaksiClass(barang_obj=wrap_barang, kuantitas=int(qty))
             wrapper_trx.Pesanan(wrap_detail)
             
-            # Kurangi Stok di Logic & Update ke DB
-            wrap_barang.kurangiStok(int(qty))
-            b_db.stok = wrap_barang.infoStok()
+            # Hitung total manual untuk memastikan data tidak 0
+            total_kalkulasi_manual += (float(b_db.hargajual) * int(qty))
+
+            # Kurangi stok di DB
+            b_db.stok -= int(qty)
             b_db.save()
 
-        # 3. Simpan Header Transaksi ke Database
+        # Simpan ke TransaksiModel
+        # Gunakan total_kalkulasi_manual jika getTotalBayar() tetap 0
+        final_total = wrapper_trx.getTotalBayar()
+        if final_total == 0 or final_total is None:
+            final_total = total_kalkulasi_manual
+
         new_trx_db = TransaksiModel.objects.create(
             nama_pembeli=wrapper_trx.namaPembeli,
-            tanggal=datetime.now().date(),
-            total_harga=wrapper_trx.getTotalBayar(),
+            tanggal=tanggal_input if tanggal_input else datetime.now().date(),
+            total_harga=final_total, # Simpan nilai total di sini
             id_pegawai_id=request.session.get('ID')
         )
 
-        # 4. Simpan Detail Transaksi ke Database (BAGIAN KRUSIAL)
+        # Simpan Detail ke DB
         for d in wrapper_trx.detailPesanan:
             DetailModel.objects.create(
                 id_transaksi=new_trx_db,
                 id_barang_id=d.getBarang().ID,
                 jumlah=d.getKuantitas(),
-                # TAMBAHKAN HARGA SATUAN DI SINI BIAR GAK INTEGRITY ERROR
                 harga_satuan=d.getBarang().hargaJual, 
                 subtotal_harga=d.getSubTotal() 
             )
 
         return redirect('dashboard')
-        
-    return redirect('transaksi')
 
 
 def tampilkan_detail_transaksi(request, id_transaksi):
@@ -387,9 +376,7 @@ def tampilkan_detail_transaksi(request, id_transaksi):
     if not nama:
         return redirect('login')
     
-    transaksi_db = Transaksi.objects.get(id_transaksi=id_transaksi)
-    
-
+    transaksi_db = TransaksiModel.objects.get(id_transaksi=id_transaksi)
     
     context = {
         'transaksi': transaksi_db
@@ -407,17 +394,67 @@ def hapus_detail_transaksi(request, id_transaksi):
 
 def tampilkan_laporan(request):
     nama = request.session.get('username')
-    
     if not nama:
         return redirect('login')
+
+    barang_mentah = BarangModel.objects.all()
+    total_pendapatan = 0
+    for b in barang_mentah:
+        total_pendapatan += (b.hargajual * b.stok)
+
     
-    return render(request, 'menu_display/laporan.html')
+    transaksi_qs = TransaksiModel.objects.all()
+    banyak_transaksi = 0
+    for t in transaksi_qs:
+        banyak_transaksi += 1
+
+    
+    laba_bersih = 0
+    details = DetailModel.objects.filter(id_transaksi__in=transaksi_qs).select_related('id_barang')
+    
+    for d in details:
+        margin = d.harga_satuan - d.id_barang.hargabeli
+        laba_bersih += (margin * d.jumlah)
+
+
+    stok_menipis_count = 0
+    for b in barang_mentah:
+        if b.stok <= 10:
+            stok_menipis_count += 1
+
+    
+    tgl_mulai = request.GET.get('tgl_mulai')
+    tgl_akhir = request.GET.get('tgl_akhir')
+
+    if tgl_mulai and tgl_akhir:
+        transaksi_qs = transaksi_qs.filter(tanggal__range=[tgl_mulai, tgl_akhir])
+    
+    transaksi_qs = transaksi_qs.order_by('-id_transaksi')
+
+    total_pendapatan = 0
+    for t in transaksi_qs:
+        total_pendapatan += t.total_harga
+
+    total_transaksi_count = transaksi_qs.count()
+
+    paginator = Paginator(transaksi_qs, 5) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'total_pendapatan': total_pendapatan,
+        'total_transaksi': total_transaksi_count,
+        'page_obj': page_obj,
+        'stok_menipis': stok_menipis_count,
+        'laba_bersih': laba_bersih,
+        'tgl_mulai': tgl_mulai,
+        'tgl_akhir': tgl_akhir,
+    }
+    
+    return render(request, 'menu_display/laporan.html', context)
 
 
 #=============================================================================
-
-
-
 
 def tampilkan_settings(request):
     nama = request.session.get('username')
@@ -442,7 +479,3 @@ def tampilkan_manage(request):
         return redirect('login')
     
     return render(request, 'menu_display/manage.html' )
-
-
-
-
